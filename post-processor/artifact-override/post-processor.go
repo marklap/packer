@@ -1,6 +1,8 @@
 package arifactoverride
 
 import (
+	"fmt"
+
 	"github.com/mitchellh/packer/common"
 	"github.com/mitchellh/packer/helper/config"
 	"github.com/mitchellh/packer/packer"
@@ -39,7 +41,7 @@ func (p *PostProcessor) Configure(raws ...interface{}) error {
 	}
 
 	if len(p.config.Files) == 0 {
-		return fmt.Error("No files specified in artifact-override; your build will not produce any artifacts")
+		return fmt.Errorf("No files specified in artifact-override; your build will not produce any artifacts")
 	}
 
 	return nil

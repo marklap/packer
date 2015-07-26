@@ -14,7 +14,7 @@ type Artifact struct {
 
 func NewArtifact(files []string) (*Artifact, error) {
 	for _, f := range files {
-		if fi, err := os.Stat(f); err != nil {
+		if _, err := os.Stat(f); err != nil {
 			return nil, err
 		}
 	}
