@@ -1,4 +1,4 @@
-package arifactoverride
+package artifice
 
 import (
 	"fmt"
