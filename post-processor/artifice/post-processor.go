@@ -2,6 +2,7 @@ package arifactoverride
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/mitchellh/packer/common"
 	"github.com/mitchellh/packer/helper/config"
@@ -41,14 +42,19 @@ func (p *PostProcessor) Configure(raws ...interface{}) error {
 	}
 
 	if len(p.config.Files) == 0 {
-		return fmt.Errorf("No files specified in artifact-override; your build will not produce any artifacts")
+		return fmt.Errorf("No files specified in artifice configuration")
 	}
 
 	return nil
 }
 
 func (p *PostProcessor) PostProcess(ui packer.Ui, artifact packer.Artifact) (packer.Artifact, bool, error) {
-	artifact, err := NewArtifact(p.config.Files)
+	if len(artifact.Files()) > 0 {
+		ui.Say(fmt.Sprintf("Discarding artifact files: %s", strings.Join(artifact.Files(), ", ")))
+	}
 
-	return artifact, p.config.Keep, err
+	artifact, err := NewArtifact(p.config.Files)
+	ui.Say(fmt.Sprintf("Using these artifact files: %s", strings.Join(artifact.Files(), ", ")))
+
+	return artifact, true, err
 }

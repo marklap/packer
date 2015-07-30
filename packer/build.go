@@ -217,10 +217,14 @@ func (b *coreBuild) Run(originalUi Ui, cache Cache) ([]Artifact, error) {
 	errors := make([]error, 0)
 	keepOriginalArtifact := len(b.postProcessors) == 0
 
+	// We want to set this outside the loop so it can be overridden. Otherwise
+	// it will be set back to the builderArtifact each time we run a
+	// post-processor, which means they can't be chained.
+	priorArtifact := builderArtifact
+
 	// Run the post-processors
 PostProcessorRunSeqLoop:
 	for _, ppSeq := range b.postProcessors {
-		priorArtifact := builderArtifact
 		for i, corePP := range ppSeq {
 			ppUi := &TargettedUi{
 				Target: fmt.Sprintf("%s (%s)", b.Name(), corePP.processorType),

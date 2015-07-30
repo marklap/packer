@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-const BuilderId = "packer.post-processor.artifact-override"
+const BuilderId = "packer.post-processor.artifice"
 
 type Artifact struct {
 	files []string
@@ -47,7 +47,7 @@ func (a *Artifact) State(name string) interface{} {
 
 func (a *Artifact) Destroy() error {
 	for _, f := range a.files {
-		err := os.Remove(f)
+		err := os.RemoveAll(f)
 		if err != nil {
 			return err
 		}
